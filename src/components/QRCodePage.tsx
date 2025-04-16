@@ -1,14 +1,14 @@
 'use client';
 
 import React from 'react';
+import axios from 'axios'
 
-interface QRCodePageProps {
-  eventId: string;
-}
 
-const QRCodePage: React.FC<QRCodePageProps> = ({ eventId }) => {
+const QRCodePage = async () => { 
   // In a real application, you would generate this URL based on your API
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${eventId}`;
+  const user = await axios.get('api/me')
+  const userData = user.data
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${userData.email}`;
 
   return (
     <div className="bg-gray-800 text-gray-200 min-h-screen flex flex-col items-center justify-center">

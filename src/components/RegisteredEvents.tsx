@@ -3,8 +3,12 @@
 import { Calendar, MapPin, Clock } from 'lucide-react';
 import { Event } from '../types';
 import Link from 'next/link';
+import axios from 'axios';
 
-const RegisteredEvents = () => {
+const RegisteredEvents = async () => {
+
+  const user = await axios.get('api/me')
+  const userData = user.data
   
   const events: Event[] = [
     {
@@ -62,7 +66,7 @@ const RegisteredEvents = () => {
                   <div className="font-semibold text-primary">Confirmed</div>
                 </div>
                 <Link 
-                  href={`/qr/${event.id}`}
+                  href={`/registered-events/qr/${userData.id}`}
                   className="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-accent transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-center"
                 >
                   View Details

@@ -36,7 +36,7 @@ const Sidebar = () => {
           <span>All Events</span>
         </Link>
 
-        {isLoggedIn && (
+        {(isLoggedIn) && (
           <>
             <Link
               href="/registered-events"

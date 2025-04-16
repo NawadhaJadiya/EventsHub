@@ -1,38 +1,50 @@
+
 import { useEffect, useState } from 'react';
+import axios from "axios";
+import  Link  from 'next/link';
+
+
 
 const useAuthStatus = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    const checkUserStatus = () => {
-      const user = localStorage.getItem('user');
-      if (user) {
-        const userData = JSON.parse(user);
-        setIsAdmin(userData.role === 'admin');
-        setIsLoggedIn(true);
-      } else {
-        setIsAdmin(false);
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get('/api/me');
+        const data = res.data;
+        setIsLoggedIn(data.isLoggedIn);
+        setIsAdmin(data.isAdmin);
+        setUserEmail(data.email);
+        setUserId(data.id);
+      } catch {
         setIsLoggedIn(false);
+        setIsAdmin(false);
+        setUserEmail(null);
+        setUserId(null);
       }
     };
 
-    checkUserStatus();
-    window.addEventListener('storage', checkUserStatus);
-
-    return () => {
-      window.removeEventListener('storage', checkUserStatus);
-    };
+    checkAuth();
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem('user');
-    setIsAdmin(false);
-    setIsLoggedIn(false);
-    window.location.href = '/';
+  const logout = async () => {
+    try {
+      await axios.get('/api/logout');
+      setIsLoggedIn(false);
+      setIsAdmin(false);
+      setUserEmail(null);
+      setUserId(null);
+      window.location.href = '/';
+    } catch (err: any) {
+      console.error('Logout failed:', err.message);
+    }
   };
 
-  return { isLoggedIn, isAdmin, logout };
+  return { isLoggedIn, isAdmin, userEmail, userId, logout };
 };
 
 export default useAuthStatus;

@@ -92,7 +92,7 @@ const HostEvent = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-black mb-1">
+              <label className="block text-sm font-medium text-white mb-1">
                 Max Participants
               </label>
               <input
@@ -105,7 +105,7 @@ const HostEvent = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-black mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Event Date
                 </label>
                 <div className="relative">
@@ -121,7 +121,7 @@ const HostEvent = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-black mb-1">
+                <label className="block text-sm font-medium text-white mb-1">
                   Registration Deadline
                 </label>
                 <div className="relative">
@@ -138,7 +138,7 @@ const HostEvent = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-black mb-1">
+              <label className="block text-sm font-medium text-white mb-1">
                 Location
               </label>
               <div className="relative">
@@ -154,7 +154,7 @@ const HostEvent = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-black mb-1">
+              <label className="block text-sm font-medium text-white mb-1">
                 End Date (Optional)
               </label>
               <input
@@ -166,7 +166,7 @@ const HostEvent = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-black mb-1">
+              <label className="block text-sm font-medium text-white mb-1">
                 Organizers (Optional)
               </label>
               <input
@@ -178,7 +178,7 @@ const HostEvent = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-black mb-1">
+              <label className="block text-sm font-medium text-white mb-1">
                 Speakers (Optional)
               </label>
               <input
@@ -190,7 +190,7 @@ const HostEvent = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-black mb-1">
+              <label className="block text-sm font-medium text-white mb-1">
                 Event Image
               </label>
               <input

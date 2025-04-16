@@ -4,26 +4,53 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { UserPlus } from 'lucide-react';
+import  toast  from 'react-hot-toast';
+import axios from 'axios';
+
 
 const SignUp = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: '',
-    confirmPassword: '',
-    institute: '',
-    enrollment: '',
-    phone: '',
+    instituteName: '',
+    enrollmentNumber: '',
+    phoneNumber: '',
     course: '',
-    branch: '',
-    admissionYear: ''
+    branch_specialization: '',
+    admissionYear: '',
+    password: '',
+    
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  
+ const [loading, setLoading] = useState(false);
+ 
+  
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    
     e.preventDefault();
-    // Handle registration logic
-    router.push('/login');
+
+    if (formData.password !== confirmPassword) {
+      alert("Passwords do not match");
+      return; // Stop form submission
+    }
+
+    try {
+      setLoading(true);
+      const res = await axios.post('/api/users/signUp', formData);
+      console.log("signUp success");
+      router.push('/login')
+    } catch (error : any) {
+      toast.error(error.message);
+    }
+    finally {setLoading(false);}
+
+
+    
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,8 +108,8 @@ const SignUp = () => {
               </label>
               <input
                 type="text"
-                name="institute"
-                value={formData.institute}
+                name="instituteName"
+                value={formData.instituteName}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 required
@@ -95,8 +122,8 @@ const SignUp = () => {
               </label>
               <input
                 type="text"
-                name="enrollment"
-                value={formData.enrollment}
+                name="enrollmentNumber"
+                value={formData.enrollmentNumber}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
                 required
@@ -109,8 +136,8 @@ const SignUp = () => {
               </label>
               <input
                 type="tel"
-                name="phone"
-                value={formData.phone}
+                name="phoneNumber"
+                value={formData.phoneNumber}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 required
@@ -137,8 +164,8 @@ const SignUp = () => {
               </label>
               <input
                 type="text"
-                name="branch"
-                value={formData.branch}
+                name="branch_specialization"
+                value={formData.branch_specialization}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 required
@@ -180,8 +207,8 @@ const SignUp = () => {
               <input
                 type="password"
                 name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               />
@@ -190,9 +217,8 @@ const SignUp = () => {
 
           <button
             type="submit"
-            className="w-full bg-red-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-red-700 transition-colors"
-          >
-            Sign Up
+            className="w-full bg-red-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+            {loading ? 'Loading...' : 'Register'}
           </button>
         </form>
 
