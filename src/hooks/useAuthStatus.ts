@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import  Link  from 'next/link';
 
-
-
 const useAuthStatus = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);

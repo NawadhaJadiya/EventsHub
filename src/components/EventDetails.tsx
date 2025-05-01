@@ -1,60 +1,89 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams} from 'next/navigation';
 import { Calendar, MapPin, Clock, User } from 'lucide-react';
 import useAuthStatus from '../hooks/useAuthStatus';
 import PopUp from './PopUp';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { EventTypes } from '../types';
+import axios from 'axios';
 
-interface EventDetailsProps {
-  id: string;
-}
 
-const EventDetails = ({ id }: EventDetailsProps) => {
+const EventDetails = () => {
+  const [event, setEvent] = useState<EventTypes>();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const id = searchParams.get('id');
+  useEffect(() => {
+    const storedEvent = localStorage.getItem('selectedEvent');
+    if (storedEvent) {
+      setEvent(JSON.parse(storedEvent));
+    }
+  }, []);
+  
   const { isLoggedIn, isAdmin, logout } = useAuthStatus();
   const [showPopup, setShowPopup] = useState(false);
+  const [message , setMessage] = useState(false);
+  
 
-  // This would come from your API/state management
-  const event = {
-    id,
-    title: 'Tech Conference 2024',
-    description: 'Join us for the most anticipated technology conference of the year! Featuring keynote speakers from leading tech companies, hands-on workshops, networking opportunities, and the latest in technological innovations.',
-    date: '2024-04-15',
-    location: 'Convention Center',
-    imageUrl: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80',
-    registrationDeadline: '2024-04-01',
-    organizer: 'Tech Events Inc',
-    status: 'upcoming'
-  };
+  if (!event) return <div>Loading event...</div>;
 
-  const handleRegister = () => {
-    if (isLoggedIn) {
-      setShowPopup(true);
-
-      // Auto-hide popup after 2 seconds, then navigate
+  
+  
+  const handleRegister = async () => {
+    if(!isLoggedIn){
+      router.push('/login');
+    }
+    
+    else if(isAdmin){
+      setShowPopup(true)
       setTimeout(() => {
         setShowPopup(false);
         router.push('/');
       }, 2000);
-    } else {
-      router.push('/login');
     }
+    else {
+      try {
+    const user = await axios.get('/api/me')
+    const userData = user.data
+    const Eventdata = {
+      userId: userData.id,
+      eventId: event._id,
+    };
+    
+    
+    
+    const response = await axios.put('/api/users/register', Eventdata);
+    alert(response.data.message)
+    console.log(response.data)
+      } catch (error : any) {
+        alert(error.message)
+        console.log(error.message)
+      }
+      finally{
+    
+      setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+        router.push('/');
+      }, 2000);
+    }}
   };
 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="relative mb-8">
         <img
-          src={event.imageUrl}
-          alt={event.title}
+          src={event.image}
+          alt={event.name}
           className="w-full h-64 object-cover rounded-lg shadow-lg"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-secondary to-transparent opacity-60 rounded-lg"></div>
       </div>
 
       <div className="bg-secondary rounded-lg shadow-md p-8">
-        <h1 className="text-3xl font-bold text-white mb-4">{event.title}</h1>
+        <h1 className="text-3xl font-bold text-white mb-4">{event.name}</h1>
         
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="flex items-center text-gray-400 hover:text-accent transition-colors">
@@ -69,7 +98,7 @@ const EventDetails = ({ id }: EventDetailsProps) => {
           
           <div className="flex items-center text-gray-400 hover:text-accent transition-colors">
             <Clock className="w-5 h-5 mr-2 text-primary" />
-            <span>Register by {new Date(event.registrationDeadline).toLocaleDateString()}</span>
+            <span>Register by {new Date(event.deadline).toLocaleDateString()}</span>
           </div>
           
           <div className="flex items-center text-gray-400 hover:text-accent transition-colors">
@@ -91,7 +120,7 @@ const EventDetails = ({ id }: EventDetailsProps) => {
         </button>
       </div>
 
-      <PopUp visible={showPopup} message="Registration Complete!" />
+      <PopUp visible={showPopup} message={(!isAdmin) ? 'Registration Complete' : 'Login with a user account or create one'} />
     </div>
   );
 };

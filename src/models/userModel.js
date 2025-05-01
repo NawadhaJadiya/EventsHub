@@ -49,6 +49,17 @@ const userSchema = new mongoose.Schema({
         type : Boolean,
         default : false
     },
+    events: {
+            type: [
+              {
+                event : {
+                  type: mongoose.Schema.Types.ObjectId,
+                  ref: "events",
+                  required: true
+                },
+              }
+            ],
+        },
     forgotPasswordToken : String,
     verifyToken : String,
     forgotPasswordTokenExpiry : Date,

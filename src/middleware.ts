@@ -44,12 +44,12 @@ export async function middleware(request: NextRequest) {
     // User-only routes (non-admins)
     const userRoutes = ['/registered-events'];
 
-    // if (userRoutes.some((route) => path.startsWith(route))) {
-    //   if (isAdmin) {
-    //     console.log('Admin trying to access user-only route');
-    //     return NextResponse.redirect(new URL('/', request.url));
-    //   }
-    // }
+    if (userRoutes.some((route) => path.startsWith(route))) {
+      if (isAdmin) {
+        console.log('Admin trying to access user-only route');
+        return NextResponse.redirect(new URL('/', request.url));
+      }
+    }
 
     return NextResponse.next(); // Allow access if all checks pass
 

@@ -1,52 +1,44 @@
 'use client';
 
 import { Calendar, MapPin, ExternalLink } from 'lucide-react';
-import { Event } from '../types';
+import { EventTypes } from '../types';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useState , useEffect} from 'react';
+import axios from 'axios';
 
 const PreviousEvents = () => {
-  // This would come from your API/state management
-  const events: Event[] = [
-    {
-      id: '1',
-      title: 'Tech Conference 2023',
-      description: 'A successful gathering of tech enthusiasts and industry leaders',
-      date: '2023-11-15',
-      location: 'Convention Center',
-      imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80',
-      registrationDeadline: '2023-11-01',
-      organizer: 'Tech Events Inc',
-      status: 'past'
-    },
-    {
-      id: '2',
-      title: 'Startup Summit',
-      description: 'Connect with entrepreneurs and investors',
-      date: '2024-05-20',
-      location: 'Innovation Hub',
-      imageUrl: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&q=80',
-      registrationDeadline: '2024-05-10',
-      organizer: 'Startup Network',
-      status: 'upcoming'
-    }
-  ];
+  
+  const router = useRouter;
+  const [events, setEvents] = useState<EventTypes[]>([]);
+
+  useEffect(() => {
+    const fetchPreviousEvents = async() => {
+      const res = await fetch('/api/previousEvents');
+      const data = await res.json();
+      console.log(data.events, 'these are the previous events');
+      setEvents(data.events);
+    };
+
+    fetchPreviousEvents();
+  }, []);
 
   return (
     <div>
       <h1 className="text-3xl font-bold text-white mb-8">Previous Events</h1>
       <div className="space-y-8">
         {events.map((event) => (
-          <div key={event.id} className="bg-black rounded-lg shadow-md overflow-hidden">
+          <div key={event._id} className="bg-black rounded-lg shadow-md overflow-hidden">
             <div className="grid grid-cols-3 gap-6">
               <div className="col-span-1">
                 <img
-                  src={event.imageUrl}
-                  alt={event.title}
+                  src={event.image}
+                  alt={event.name}
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="col-span-2 p-6">
-                <h2 className="text-2xl font-semibold text-white mb-4">{event.title}</h2>
+                <h2 className="text-2xl font-semibold text-white mb-4">{event.name}</h2>
                 <p className="text-gray-500 mb-6">{event.description}</p>
                 
                 <div className="grid grid-cols-2 gap-4 mb-6">
@@ -69,7 +61,7 @@ const PreviousEvents = () => {
                   </ul>
 
                   <Link
-                    href={`/events/${event.id}/gallery`}
+                    href={`/events/${event._id}/gallery`}
                     className="inline-flex items-center text-red-500 hover:text-white font-semibold"
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />

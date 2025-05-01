@@ -1,26 +1,43 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Calendar, MapPin, Clock } from 'lucide-react';
+import { Calendar, MapPin, Clock, Router } from 'lucide-react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const HostEvent = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false)
   const [eventData, setEventData] = useState({
-    title: '',
+    name: '',
     description: '',
-    date: '',
-    location: '',
-    registrationDeadline: '',
-    imageUrl: '',
-    chapterName: '',
-    eventType: '',
+    organizer : '',
     maxParticipants: '',
+    date: '',
+    deadline : '',
+    category : '',
+    location : '',
     endDate: '',
-    organizers: '',
-    speakers: ''
-  });
+    time : '',
+    guests: [] as string[],
+    image: '',
+    });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) =>{
+
     e.preventDefault();
+    try{
+      setLoading(true)
+      const res = await axios.post('api/admin/hostEvent', eventData);
+      console.log(res.data);
+      alert("Event created succesfully")
+      router.push('/')
+
+    }
+    catch(error : any){
+        alert(error.message)
+    }
+    finally{setLoading(false)}
   };
 
   return (
@@ -38,8 +55,8 @@ const HostEvent = () => {
               </label>
               <input
                 type="text"
-                value={eventData.title}
-                onChange={(e) => setEventData({ ...eventData, title: e.target.value })}
+                value={eventData.name}
+                onChange={(e) => setEventData({ ...eventData, name: e.target.value })}
                 className="w-full px-4 py-2 bg-secondary-light border border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-black"
                 required
               />
@@ -60,34 +77,38 @@ const HostEvent = () => {
 
             <div>
               <label className="block text-sm font-medium text-white mb-1">
-                Chapter Name
+                Organizer
               </label>
               <input
                 type="text"
-                value={eventData.chapterName}
-                onChange={(e) => setEventData({ ...eventData, chapterName: e.target.value })}
+                value={eventData.organizer}
+                onChange={(e) => setEventData({ ...eventData, organizer: e.target.value })}
                 className="w-full px-4 py-2 bg-secondary-light border border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-black"
                 required
               />
             </div>
+
 
             <div>
               <label className="block text-sm font-medium text-white mb-1">
                 Event Type
               </label>
               <select
-                value={eventData.eventType}
-                onChange={(e) => setEventData({ ...eventData, eventType: e.target.value })}
+                value={eventData.category}
+                onChange={(e) => setEventData({ ...eventData, category: e.target.value })}
                 className="w-full px-4 py-2 bg-secondary-light border border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-black"
                 required
               >
                 <option value="">Select Event Type</option>
-                <option value="workshop">Workshop</option>
-                <option value="seminar">Seminar</option>
-                <option value="webinar">Webinar</option>
-                <option value="recruitment">Recruitment</option>
-                <option value="competition">Competition</option>
-                <option value="quiz">Quiz</option>
+                <option value="Workshop">Workshop</option>
+                <option value="Show">Show</option>
+                <option value="Seminar">Seminar</option>
+                <option value="Webinar">Webinar</option>
+                <option value="Recruitment">Recruitment</option>
+                <option value="Competition">Competition</option>
+                <option value="Quiz">Quiz</option>
+                <option value="Training Programs">Training Programs</option>
+                <option value="Others">Others</option>
               </select>
             </div>
 
@@ -128,8 +149,8 @@ const HostEvent = () => {
                   <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <input
                     type="date"
-                    value={eventData.registrationDeadline}
-                    onChange={(e) => setEventData({ ...eventData, registrationDeadline: e.target.value })}
+                    value={eventData.deadline}
+                    onChange={(e) => setEventData({ ...eventData, deadline: e.target.value })}
                     className="w-full pl-10 pr-4 py-2 bg-secondary-light border border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-black"
                     required
                   />
@@ -167,47 +188,66 @@ const HostEvent = () => {
 
             <div>
               <label className="block text-sm font-medium text-white mb-1">
-                Organizers (Optional)
+                Time
               </label>
               <input
-                type="text"
-                value={eventData.organizers}
-                onChange={(e) => setEventData({ ...eventData, organizers: e.target.value })}
+                type="time"
+                value={eventData.time as string}
+                onChange={(e) => setEventData({ ...eventData, time: e.target.value as string})}
                 className="w-full px-4 py-2 bg-secondary-light border border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-black"
               />
             </div>
 
+
             <div>
-              <label className="block text-sm font-medium text-white mb-1">
-                Speakers (Optional)
-              </label>
-              <input
-                type="text"
-                value={eventData.speakers}
-                onChange={(e) => setEventData({ ...eventData, speakers: e.target.value })}
-                className="w-full px-4 py-2 bg-secondary-light border border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-black"
-              />
-            </div>
+  <label className="block text-sm font-medium text-white mb-1">
+    Guests / Speakers (Optional)
+  </label>
+
+  {eventData.guests.map((guest, index) => (
+    <div key={index} className="flex items-center gap-2 mb-2">
+      <input
+        type="text"
+        value={guest}
+        onChange={(e) => {
+          const updatedGuests = [...eventData.guests];
+          updatedGuests[index] = e.target.value;
+          setEventData({ ...eventData, guests: updatedGuests });
+        }}
+        className="w-full px-4 py-2 bg-secondary-light border border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-black"
+      />
+      <button
+        type="button"
+        onClick={() => {
+          const updatedGuests = eventData.guests.filter((_, i) => i !== index);
+          setEventData({ ...eventData, guests: updatedGuests });
+        }}
+        className="text-red-500 hover:text-red-700"
+      >
+        ✕
+      </button>
+    </div>
+  ))}
+
+  <button
+    type="button"
+    onClick={() => setEventData({ ...eventData, guests: [...eventData.guests, ""] })}
+    className="mt-2 px-3 py-1 bg-primary text-white rounded hover:bg-opacity-80"
+  >
+    + Add Guest
+  </button>
+</div>
+
 
             <div>
               <label className="block text-sm font-medium text-white mb-1">
-                Event Image
+                Add URL of poster/brochure
               </label>
               <input
-                type="file"
-                accept="image/*" // Restricts file selection to images
-                onChange={(e) => {
-                  const file = (e.target.files != null) ? e.target.files[0] : null;
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                      setEventData({ ...eventData, imageUrl: reader.result as string}); // Store the data URL
-                    };
-                    reader.readAsDataURL(file); // Read the file as a data URL
-                  }
-                }}
+                type="url"
+                value={eventData.image}
+                onChange={(e) => setEventData({ ...eventData, image: e.target.value })}
                 className="w-full px-4 py-2 bg-secondary-light border border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-black"
-                required
               />
             </div>
           </div>
@@ -217,7 +257,7 @@ const HostEvent = () => {
           type="submit"
           className="w-full bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-accent transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
         >
-          Create Event
+          {(loading) ? 'Loading' : 'Create Event'}
         </button>
       </form>
     </div>

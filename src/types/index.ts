@@ -1,11 +1,15 @@
-export interface Event {
-  id: string;
-  title: string;
+export interface EventTypes {
+  _id: string;
+  name: string;
   description: string;
-  date: string;
+  organizer : string;
+  maxParticipants : number;
+  date: Date;
+  deadline : Date;
+  category : string;
   location: string;
-  imageUrl: string;
-  registrationDeadline: string;
-  organizer: string;
-  status: 'upcoming' | 'ongoing' | 'completed' | 'past';
+  endDate : Date;
+  time : string;
+  guests : string[];
+  image: string;
 } 

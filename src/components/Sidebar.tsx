@@ -13,7 +13,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     logout();
   };
-
+  
   const isActive = (path: string) => pathname === path;
 
   return (

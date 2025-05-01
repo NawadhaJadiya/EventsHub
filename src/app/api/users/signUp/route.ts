@@ -10,7 +10,7 @@ export async function POST(request : NextRequest){
         const reqBody = await request.json()
         const {name, email, instituteName, enrollmentNumber, phoneNumber, course, branch_specialization, admissionYear, password} = reqBody
 
-        console.log(reqBody)
+        console.log('Signup request body:', reqBody)
 
         if (!email || !password || !name || !instituteName || !enrollmentNumber || !phoneNumber || !course || !branch_specialization || !admissionYear) {
             return NextResponse.json(
@@ -46,12 +46,14 @@ export async function POST(request : NextRequest){
             course,
             branch_specialization,
             admissionYear,
-            password : hashedPassword
+            password: hashedPassword,
+            events: [],
+            isVerified: false,
+            isAdmin: false
         });
 
         const savedUser = await newUser.save()
-
-        console.log(savedUser)
+        console.log('Saved user:', savedUser)
 
         return NextResponse.json({
             message: "User created successfully",
@@ -60,8 +62,8 @@ export async function POST(request : NextRequest){
                 name: savedUser.name,
                 email: savedUser.email
             }
-        }, {status : 201})
-    } catch (error : any) {
+        }, {status: 201})
+    } catch (error: any) {
         console.error('Signup error:', error);
         
         if (error.name === 'ValidationError') {
@@ -78,6 +80,6 @@ export async function POST(request : NextRequest){
             );
         }
 
-        return NextResponse.json({error : "Internal server error"}, {status : 500})
+        return NextResponse.json({error: "Internal server error"}, {status: 500})
     }
 }
