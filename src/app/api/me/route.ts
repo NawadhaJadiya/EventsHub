@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        const decoded: any = jwt.verify(token, 'thisisNawadha');
+        const decoded: any = jwt.verify(token, 'TOKEN_SECRET');
         console.log('Token successfully decoded:', {
             isAdmin: decoded.isAdmin,
             email: decoded.email,

@@ -1,0 +1,11 @@
+add other feilds in events
+- event highlights - initially empty array just like participants
+- add photo gallery URL - specify in the frontend that after the event add the photos in this drive
+
+remove registered event from admin routes
+
+check why the images aren't loading
+
+implement my-events api to fetch the events specific to that admin only
+- modify the admin model and add events conducted field consists of eventId only
+
