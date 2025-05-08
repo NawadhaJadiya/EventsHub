@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Mongoose } from 'mongoose';
 import { emit } from 'process';
 
 const adminSchema = new mongoose.Schema({
@@ -17,7 +17,13 @@ const adminSchema = new mongoose.Schema({
         type : Boolean,
         default : false
     },
-}, {collection : 'admin'});
+    my_events: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Event"
+        }
+    ]
+});
 
 const Admin = mongoose.models.Admin || mongoose.model('Admin', adminSchema);
 

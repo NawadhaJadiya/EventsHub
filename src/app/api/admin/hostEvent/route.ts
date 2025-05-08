@@ -28,7 +28,7 @@ export async function POST(request : NextRequest){
             time, 
             guests, 
             image, 
-            participants = []
+            participants = [],
         } = req;
 
         endDate = endDate || date;
@@ -53,7 +53,18 @@ export async function POST(request : NextRequest){
             location, endDate,time, guests, image, participants
     });
 
+
+
     const savedEvent = await newEvent.save();
+
+    await Admin.findOneAndUpdate(
+       {_id : decodedToken.id},
+       {
+        $push :{
+            my_events : savedEvent._id,
+        }
+       },
+    );
 
     console.log(savedEvent)
     return NextResponse.json({message : "Event created successfully", 

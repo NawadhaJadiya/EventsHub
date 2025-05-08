@@ -1,3 +1,4 @@
+
 export interface EventTypes {
   _id: string;
   name: string;
@@ -12,4 +13,17 @@ export interface EventTypes {
   time : string;
   guests : string[];
   image: string;
-} 
+
+};
+
+export interface RegistrationTypes{
+  time : Date
+  name : string
+  phoneNumber : number
+  email : string
+  enrollmentNumber : string
+  year : number
+  course : string
+  branch : string
+  attended : boolean
+}

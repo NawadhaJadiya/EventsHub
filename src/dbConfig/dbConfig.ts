@@ -8,8 +8,8 @@ export async function connect() {
         return;
     }
     try {
-        console.log('Attempting to connect to MongoDB with URL:', "MONGO_DB_URI");
-        await mongoose.connect("MONGO_DB_URI");
+        console.log('Attempting to connect to MongoDB with URL:', "mongodb+srv://nawadhajadiya:EventsHub%27sData23-08@eventshub.cu2irfy.mongodb.net/?retryWrites=true&w=majority&appName=EventsHub");
+        await mongoose.connect("mongodb+srv://nawadhajadiya:EventsHub%27sData23-08@eventshub.cu2irfy.mongodb.net/?retryWrites=true&w=majority&appName=EventsHub");
         
         const connection = mongoose.connection;
         

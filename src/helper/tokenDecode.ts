@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 export function decodeToken(token: string) {
   try {
     console.log('Attempting to decode token...');
-    const decoded = jwt.verify(token, 'TOKEN_SECRET');
+    const decoded = jwt.verify(token, 'thisisNawadha');
     console.log('Token successfully decoded:', decoded);
     return decoded;
   } catch (err) {

@@ -28,6 +28,7 @@ const HostEvent = () => {
     e.preventDefault();
     try{
       setLoading(true)
+      
       const res = await axios.post('api/admin/hostEvent', eventData);
       console.log(res.data);
       alert("Event created succesfully")

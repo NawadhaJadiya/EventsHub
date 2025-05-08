@@ -29,7 +29,7 @@ export async function POST(request : NextRequest){
             isAdmin: false
         }
 
-        const token = jwt.sign(tokenData, "TOKEN_SECRET", {expiresIn: '1d'})
+        const token = jwt.sign(tokenData, "thisisNawadha", {expiresIn: '1d'})
         console.log('Token generated for:', email);
 
         const response = NextResponse.json({

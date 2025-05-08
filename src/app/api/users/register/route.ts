@@ -21,12 +21,12 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ message: 'User already registered for this event' }, { status: 400 });
     }
 
-    const finalResult = await Event.findOneAndUpdate(
+    await Event.findOneAndUpdate(
         {_id : eventId},
         {
             $push : {
                 participants : {
-                    userId: userId
+                    user: userId
                 }
             }
         }

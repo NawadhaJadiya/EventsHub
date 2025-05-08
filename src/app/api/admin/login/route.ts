@@ -26,7 +26,7 @@ export async function POST(request : NextRequest){
             isAdmin : true
         }
 
-        const token = jwt.sign(tokenData, "TOKEN_SECRET", {expiresIn: '10d'})
+        const token = jwt.sign(tokenData, "thisisNawadha", {expiresIn: '10d'})
         const response = NextResponse.json({
             token: token,
             message : 'Login Succesful', 

@@ -24,15 +24,7 @@ const RegisteredEvents = () => {
           const eventsResponse = await axios.get(`/api/users/getRegisteredEvents/${userResponse.data.id}`);
           console.log('Full events response:', eventsResponse);
           
-          // Store debug info
-          setDebugInfo({
-            userId: userResponse.data.id,
-            eventsResponse: eventsResponse.data,
-            eventsArray: eventsResponse.data.events,
-            eventsLength: eventsResponse.data.events?.length
-          });
           
-          // Ensure events is an array and has valid data
           const eventsData = eventsResponse.data.events || [];
           console.log('Events data:', eventsData);
           
