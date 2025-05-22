@@ -4,6 +4,8 @@ import { Calendar, MapPin, Clock } from 'lucide-react';
 import { EventTypes } from '../types';
 import Link from 'next/link';
 import axios from 'axios';
+import { getDirectDriveImageUrl } from "@/helper/getDirectDriveImageUrl";
+
 
 const RegisteredEvents = () => {
   
@@ -84,7 +86,7 @@ const RegisteredEvents = () => {
       <h1 className="text-3xl font-bold text-white mb-8">Registered Events</h1>
       <div className="space-y-6">
         {events.map((event) => {
-          // Add additional safety checks
+          const directUrl : any= getDirectDriveImageUrl(event.image);
           if (!event || typeof event !== 'object') {
             console.log('Invalid event:', event);
             return null;
@@ -95,7 +97,7 @@ const RegisteredEvents = () => {
               <div className="flex">
                 <div className="relative w-48">
                   <img
-                    src={event.image || 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80'}
+                    src={directUrl || 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80'}
                     alt={event.name || 'Event Image'}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                   />

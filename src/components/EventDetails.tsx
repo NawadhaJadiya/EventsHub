@@ -1,4 +1,5 @@
 'use client';
+import { getDirectDriveImageUrl } from "@/helper/getDirectDriveImageUrl";
 
 import { useRouter, useSearchParams} from 'next/navigation';
 import { Calendar, MapPin, Clock, User } from 'lucide-react';
@@ -75,7 +76,7 @@ const EventDetails = () => {
     <div className="max-w-4xl mx-auto">
       <div className="relative mb-8">
         <img
-          src={event.image}
+          src={getDirectDriveImageUrl(event.image)!}
           alt={event.name}
           className="w-full h-64 object-cover rounded-lg shadow-lg"
         />

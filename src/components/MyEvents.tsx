@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { getDirectDriveImageUrl } from "@/helper/getDirectDriveImageUrl";
 
 const MyEvents = () => {
   
@@ -48,12 +49,14 @@ const MyEvents = () => {
     <div>
       <h1 className="text-3xl font-bold text-white mb-8">My Events</h1>
       <div className="space-y-6">
-        {events.map((event) => (
+        {events.map((event) => {
+          const directUrl : any= getDirectDriveImageUrl(event.image);
+          return (
           <div key={event._id} className="bg-secondary rounded-lg shadow-md p-6 group hover:shadow-xl transition-all duration-300">
             <div className="flex items-start gap-6">
               <div className="relative w-48 h-32 overflow-hidden rounded-lg">
                 <img
-                  src={event.image}
+                  src={directUrl}
                   alt={event.name}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
@@ -100,7 +103,7 @@ const MyEvents = () => {
               </div>
             </div>
           </div>
-        ))}
+        )})}
       </div>
     </div>
   );

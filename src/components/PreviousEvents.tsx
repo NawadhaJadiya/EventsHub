@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState , useEffect} from 'react';
 import axios from 'axios';
+import { getDirectDriveImageUrl } from "@/helper/getDirectDriveImageUrl";
+
 
 const PreviousEvents = () => {
   
@@ -27,12 +29,14 @@ const PreviousEvents = () => {
     <div>
       <h1 className="text-3xl font-bold text-white mb-8">Previous Events</h1>
       <div className="space-y-8">
-        {events.map((event) => (
+        {events.map((event) => {
+          const directUrl : any= getDirectDriveImageUrl(event.image);
+          return (
           <div key={event._id} className="bg-black rounded-lg shadow-md overflow-hidden">
             <div className="grid grid-cols-3 gap-6">
               <div className="col-span-1">
                 <img
-                  src={event.image}
+                  src={directUrl}
                   alt={event.name}
                   className="w-full h-full object-cover"
                 />
@@ -71,7 +75,7 @@ const PreviousEvents = () => {
               </div>
             </div>
           </div>
-        ))}
+        )})}
       </div>
     </div>
   );

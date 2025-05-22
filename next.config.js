@@ -3,11 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: [], // Add your image domains here if needed
+    domains: ["lh3.googleusercontent.com"],
   },
   env: {
     MONGO_URL: process.env.MONGO_URL,
   },
 }
 
-module.exports = nextConfig 
+module.exports = nextConfig

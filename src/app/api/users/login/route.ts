@@ -9,7 +9,7 @@ export async function POST(request : NextRequest){
         await connect()
         const req = await request.json()
         const {email, password} = req;
-        console.log('Login attempt for:', email);
+        
 
         const user = await User.findOne({email})
         if(!user){

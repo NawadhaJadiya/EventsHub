@@ -5,7 +5,6 @@ import axios from 'axios'
 
 
 const QRCodePage = async () => { 
-  // In a real application, you would generate this URL based on your API
   const user = await axios.get('api/me')
   const userData = user.data
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${userData.email}`;

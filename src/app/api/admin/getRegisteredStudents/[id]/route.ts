@@ -11,7 +11,7 @@ export async function GET(req : NextRequest, { params} : {params : {id : string}
 
         await connect();
         const eventId = params.id;
-        console.log('this is the event Id received in the backend', eventId)
+        
         const event = await Event.findById(eventId);
         if (!event) {
             console.log('event not found');
